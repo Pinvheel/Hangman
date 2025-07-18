@@ -5,23 +5,23 @@
 
 using namespace std;
 
-void draw (int numberWrong);
-char prompt ();
+void draw(int numberWrong);
+void processInput();
+char prompt();
+
+string answer = "hello";
+int incorrectGuesses = 0;
 
 int main() {
-    string answer = "hello";
-    int incorrectGuesses = 0;
-    draw(incorrectGuesses);
-    /*if (find(answer.begin(), answer.end(), prompt()) == answer.end()) {
-        cout << "Wrong!\n";
+    // Draw the gamestate associated with the number of incorrect guesses.
+    while (incorrectGuesses < 6) {
+        draw(incorrectGuesses);
+        processInput();
     }
-    else {
-        cout << "Right!\n";
-    }
-    return 0;*/
+    return 0;
 }
 
-void draw (int numberWrong) {
+void draw(int numberWrong) {
     // Draws the game state.
     string fileLoc = "gallows/gallow_" + to_string(numberWrong) + ".txt";
     ifstream file(fileLoc);
@@ -30,12 +30,27 @@ void draw (int numberWrong) {
         std::cout << line << '\n';
     }
     file.close();
-    // Calls prompt.
+    return;
 }
 
-char prompt () {
+// Processes what the user input to see if it is right, wrong, or invalid.
+void processInput() {
+    char inputChar = prompt();
+    if (find(answer.begin(), answer.end(), inputChar) == answer.end()) {
+        cout << "Wrong!\n";
+        incorrectGuesses++;
+        return;
+    }
+    else {
+        cout << "Right!\n";
+        return;
+    }
+}
+
+char prompt() {
     // Prompts user for a single character input, & returns input.
     cout << "Input a letter in the word \"hello\"\n";
-    char input = cin.get();
+    char input;
+    cin >> input;
     return input;
 }
