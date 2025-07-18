@@ -1,15 +1,17 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <algorithm>
 
 using namespace std;
 
-void draw ();
+void draw (int numberWrong);
 char prompt ();
 
 int main() {
     string answer = "hello";
-    draw ();
+    int incorrectGuesses = 0;
+    draw(incorrectGuesses);
     /*if (find(answer.begin(), answer.end(), prompt()) == answer.end()) {
         cout << "Wrong!\n";
     }
@@ -19,9 +21,10 @@ int main() {
     return 0;*/
 }
 
-void draw () {
+void draw (int numberWrong) {
     // Draws the game state.
-    ifstream file("gallows/gallow_1.txt");
+    string fileLoc = "gallows/gallow_" + to_string(numberWrong) + ".txt";
+    ifstream file(fileLoc);
     string line;
     while (getline(file, line)) {
         std::cout << line << '\n';
