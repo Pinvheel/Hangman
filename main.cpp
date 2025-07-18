@@ -13,28 +13,33 @@ string word = "hello";
 string answer = "_____";
 int incorrectGuesses = 0;
 
+// Main Function: (100% done)
 int main() {
-    cout << "\033[2J\033[1;1H";
-    // Draw the gamestate associated with the number of incorrect guesses.
+    // Prepare screen for game.
+    clearScreen();
     cout << "Welcome to Hangman!\n";
+    // Game loop, goes up to but not including the lose state.
     while (incorrectGuesses < 6) {
         draw(incorrectGuesses);
         processInput();
     }
+    // The aforementioned lose state.
     draw(incorrectGuesses);
     cout << "You lose!\n";
+    // Return without error.
     return 0;
 }
 
+// Takes the number of wrong guesses and draws the game state with the corresponding number of body parts on the noose: (100% done)
 void draw(int numberWrong) {
-    // Draws the game state.
+    // Fetches file from gallows folder.
     string fileLoc = "gallows/gallow_" + to_string(numberWrong) + ".txt";
-    ifstream file(fileLoc);
-    string line;
-    while (getline(file, line)) {
-        cout << line << '\n';
-    }
+    ifstream file(fileLoc); string line;
+    
+    // Draws file on screen.
+    while (getline(file, line)) { cout << line << '\n'; }
     file.close();
+
     return;
 }
 
@@ -44,18 +49,22 @@ void processInput() {
     auto positionOfChar = find(word.begin(), word.end(), c);
     
     if (positionOfChar == word.end()) {
-        cout << "\033[2J\033[1;1H";
+        clearScreen();
         cout << "Wrong!\n";
         incorrectGuesses++;
         return;
     }
     else {
-        cout << "\033[2J\033[1;1H";
+        clearScreen();
         cout << "Right!\n";
         size_t index = distance(word.begin(), positionOfChar);
         answer[index] = c;
         return;
     }
+}
+
+void clearScreen() {
+    cout << "\033[2J\033[1;1H";
 }
 
 char prompt() {
