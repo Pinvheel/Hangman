@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include <algorithm>
+
 using namespace std;
 
 void draw ();
@@ -7,18 +9,24 @@ char prompt ();
 
 int main() {
     string answer = "hello";
-    
-    if (find(answer.begin(), answer.end(), prompt()) == answer.end()) {
+    draw ();
+    /*if (find(answer.begin(), answer.end(), prompt()) == answer.end()) {
         cout << "Wrong!\n";
     }
     else {
         cout << "Right!\n";
     }
-    return 0;
+    return 0;*/
 }
 
 void draw () {
     // Draws the game state.
+    ifstream file("gallows/gallow_1.txt");
+    string line;
+    while (getline(file, line)) {
+        std::cout << line << '\n';
+    }
+    file.close();
     // Calls prompt.
 }
 
