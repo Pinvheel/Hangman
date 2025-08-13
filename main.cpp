@@ -6,6 +6,7 @@
 
 using namespace std;
 
+void initializeWord();
 void draw(int numberWrong);
 void processInput();
 void processCorrectInput(char charGuessed);
@@ -33,6 +34,10 @@ int main() {
     draw(incorrectGuesses); // The aforementioned lose state.
     cout << "You lose!\n";
     return 0;
+}
+
+void initializeWord() {
+    
 }
 
 // Takes the number of wrong guesses and draws the game state with the corresponding number of body parts on the noose: (100% done)
