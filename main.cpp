@@ -30,7 +30,10 @@ int main() {
     while (incorrectGuesses < 6) {  // Game loop, goes up to but not including the lose state.
         draw(incorrectGuesses);
         processInput();
-        if (find(answer.begin(), answer.end(), '_') == answer.end()) { 
+        bool isWon = (find(answer.begin(), answer.end(), '_') == answer.end());
+        if (!isWon) { 
+            continue;
+        } else {
             draw(incorrectGuesses);
             cout << "You win!" << endl; 
             return 0;
@@ -109,7 +112,7 @@ void clearScreen() {
 
 char prompt() {
     // Prompts user for a single character input, & returns input.
-    cout << "Input a letter in the word \"hello\"\n";
+    cout << "Input a letter that could be in this word:\n";
     cout << answer + "\n";
     char input;
     cin >> input;
