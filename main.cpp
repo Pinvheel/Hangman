@@ -2,9 +2,13 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <random>
 #include <vector>
 
+#include <nlohmann/json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 void initializeWord();
 void draw(int numberWrong);
@@ -13,20 +17,21 @@ void processCorrectInput(char charGuessed);
 void clearScreen();
 char prompt();
 
-string word = "hello";
-string answer = "_____";
+string word;
+string answer;
 int incorrectGuesses = 0;
 
 // Main Function: (100% done)
 int main() {
     clearScreen(); // Prepare screen for game.
+    initializeWord();
     cout << "Welcome to Hangman!\n";
 
     while (incorrectGuesses < 6) {  // Game loop, goes up to but not including the lose state.
         draw(incorrectGuesses);
         processInput();
         if (find(answer.begin(), answer.end(), '_') == answer.end()) { 
-            cout << "You win!"; 
+            cout << "You win!" << endl; 
             return 0;
         }
     }
@@ -37,7 +42,26 @@ int main() {
 }
 
 void initializeWord() {
-    
+    // Choose a random word from the words.json file
+    ifstream file("words.json");
+    if(!file.is_open()) {
+        throw runtime_error("Could not open file: words.json");
+    }
+
+    json j;
+    file >> j;
+
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(0, j.size() - 1);
+
+    // Set word to it
+    word = j[dist(gen)];
+
+    // For each letter in word, create an answer string with all the letters replaced with _
+    for (char c : word) {
+        answer += '_';
+    }
 }
 
 // Takes the number of wrong guesses and draws the game state with the corresponding number of body parts on the noose: (100% done)
