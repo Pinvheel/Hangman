@@ -31,6 +31,7 @@ int main() {
         draw(incorrectGuesses);
         processInput();
         if (find(answer.begin(), answer.end(), '_') == answer.end()) { 
+            draw(incorrectGuesses);
             cout << "You win!" << endl; 
             return 0;
         }
