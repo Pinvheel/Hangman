@@ -51,9 +51,11 @@ int main() {
         game.processInput();
         if (game.checkIfLost() == true) {
             game.draw();
-            cout << "You lose!\n";
+            cout << "You lose! The word was: \"" + game.getWord() + "\"\n";
             return 0;
         }
     }
+    game.draw();
+    cout << "You win! The word was: \"" + game.getWord() + "\"\n";
 }
 

@@ -23,6 +23,7 @@ class Gallow {
 
     bool checkIfWon();
     bool checkIfLost();
+    std::string getWord() { return word; };
 
     void processInput();
  private:
