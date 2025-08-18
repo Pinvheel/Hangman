@@ -17,7 +17,10 @@ std::ifstream Gallow::openFile(std::string fileLocation) {
 void Gallow::updateState() {
     state.clear();
 
-    std::string fileLocation = "gallows/gallow_" + std::to_string(incorrectGuesses) + ".txt";
+    std::string fileLocation;
+    if (isWon) fileLocation = "gallows/gallow_victory.txt";
+    else if (incorrectGuesses >= 7) fileLocation = "gallows/gallow_loss.txt";
+    else fileLocation = "gallows/gallow_" + std::to_string(incorrectGuesses) + ".txt";
     std::ifstream file = openFile(fileLocation); 
     std::string line;
 
@@ -46,7 +49,6 @@ void Gallow::initializeAnswer() {
     }
 }
 
-
 void Gallow::draw() {
     clearScreen();
     updateState();
@@ -64,7 +66,7 @@ bool Gallow::checkIfWon() {
 }
 
 bool Gallow::checkIfLost() {
-    if (incorrectGuesses >= 6) return true;
+    if (incorrectGuesses >= 7) return true;
     else return false;
 }
 
