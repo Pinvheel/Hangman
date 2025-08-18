@@ -75,6 +75,7 @@ void Gallow::processInput() {
     std::cin >> c;
     if (guessed.count(c)) {
         std::cout << "Already guessed char " + c;
+        return;
     }
 
     guessed.insert(c);
