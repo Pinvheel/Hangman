@@ -7,6 +7,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include "gallow.hpp"
+
 using namespace std;
 using json = nlohmann::json;
 
@@ -17,18 +19,20 @@ void processCorrectInput(char charGuessed);
 void clearScreen();
 char prompt();
 
-string word;
-string answer;
-int incorrectGuesses = 0;
+// string word;
+// string answer;
+// int incorrectGuesses = 0;
+
+Gallow game;
 
 // Main Function: (100% done)
 int main() {
     // Prepare screen for game.
-    clearScreen();
-    initializeWord();
+    // initializeWord();
     cout << "Welcome to Hangman!\n";
 
-    // Game loop, goes up to but not including the lose state.
+    // Game loop, goes up to but not including the lose state. 
+    /*
     while (incorrectGuesses < 6) {
         draw(incorrectGuesses);
         processInput();
@@ -41,81 +45,15 @@ int main() {
             return 0;
         }
     }
-
-    draw(incorrectGuesses);  // The aforementioned lose state.
-    cout << "You lose!\n";
-    return 0;
-}
-
-void initializeWord() {
-    // Choose a random word from the words.json file
-    ifstream file("words.json");
-    if (!file.is_open()) {
-        throw runtime_error("Could not open file: words.json");
-    }
-
-    json j;
-    file >> j;
-
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> dist(0, j.size() - 1);
-
-    // Set word to it
-    word = j[dist(gen)];
-
-    for (char c : word) {
-        answer += '_';
+    */
+    while(game.checkIfWon() == false) {
+        game.draw();
+        game.processInput();
+        if (game.checkIfLost() == true) {
+            game.draw();
+            cout << "You lose!\n";
+            return 0;
+        }
     }
 }
 
-void draw(int numberWrong) {
-    // Fetches file from gallows folder.
-    string fileLoc = "gallows/gallow_" + to_string(numberWrong) + ".txt";
-    ifstream file(fileLoc); string line;
-
-    // Draws file on screen.
-    while (getline(file, line)) { cout << line << '\n'; }
-    file.close();
-}
-
-// Processes what the user input to see if it is right, wrong, or invalid.
-void processInput() {
-    char charGuessed = prompt();
-    auto countOfChar = count(word.begin(), word.end(), charGuessed);
-
-    if (countOfChar == 0) {
-        clearScreen();
-        cout << "Wrong!\n";
-        incorrectGuesses++;
-        return;
-    } else {
-        processCorrectInput(charGuessed);
-        return;
-    }
-}
-
-void processCorrectInput(char charGuessed) {
-    clearScreen();
-    cout << "Right!\n";
-
-    auto it = word.begin();
-    while ((it = std::find(it, word.end(), charGuessed)) != word.end()) {
-        int index = std::distance(word.begin(), it);
-        answer[index] = charGuessed;
-        ++it;
-    }
-}
-
-void clearScreen() {
-    cout << "\033[2J\033[1;1H";
-}
-
-char prompt() {
-    // Prompts user for a single character input, & returns input.
-    cout << "Input a letter that could be in this word:\n";
-    cout << answer + "\n";
-    char input;
-    cin >> input;
-    return input;
-}
