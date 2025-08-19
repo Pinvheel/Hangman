@@ -74,8 +74,12 @@ bool Gallow::checkIfLost() const {
 }
 
 void Gallow::processInput() {
-    std::cout << "Input a letter that could be in this word:\n";
-    std::cout << answer + "\n";
+    std::cout << "Input a letter that could be in this word: " << answer << "\n";
+    std::cout << "[Already guessed]: ";
+    for (char c : guessed) {
+        std::cout << c << " ";
+    }
+    std::cout << "\n";
     char c;
     std::cin >> c;
     if (guessed.count(c)) {
