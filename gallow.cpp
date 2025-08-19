@@ -1,6 +1,6 @@
 #include "gallow.hpp"
 
-Gallow::Gallow() : state(""), word(""), answer(""), incorrectGuesses(0), isWon(false) {
+Gallow::Gallow() : state(""), word(""), answer(""), incorrectGuesses(0) {
     updateState();
     initializeWord();
     initializeAnswer();
@@ -18,10 +18,15 @@ void Gallow::updateState() {
     state.clear();
 
     std::string fileLocation;
-    if (isWon) fileLocation = "gallows/gallow_victory.txt";
-    else if (incorrectGuesses >= 7) fileLocation = "gallows/gallow_loss.txt";
-    else fileLocation = "gallows/gallow_" + std::to_string(incorrectGuesses) + ".txt";
-    std::ifstream file = openFile(fileLocation); 
+    if (checkIfWon()) {
+        fileLocation = "gallows/gallow_victory.txt";
+    } else if (checkIfLost()) {
+        fileLocation = "gallows/gallow_loss.txt";
+    } else {
+        std::string guessNum = std::to_string(incorrectGuesses);
+        fileLocation = "gallows/gallow_" + guessNum + ".txt";
+    }
+    std::ifstream file = openFile(fileLocation);
     std::string line;
 
     while (getline(file, line)) { state += line + "\n"; }
@@ -30,7 +35,7 @@ void Gallow::updateState() {
 
 void Gallow::initializeWord() {
     using json = nlohmann::json;
-    
+
     std::ifstream file = openFile("words.json");
 
     json j;
@@ -60,14 +65,12 @@ void Gallow::clearScreen() {
 }
 
 
-bool Gallow::checkIfWon() {
-    if (answer == word) isWon = true;
-    return isWon;
+const bool Gallow::checkIfWon() {
+    return (answer == word);
 }
 
-bool Gallow::checkIfLost() {
-    if (incorrectGuesses >= 7) return true;
-    else return false;
+bool Gallow::checkIfLost() const {
+    return (incorrectGuesses >= maxWrongGuesses);
 }
 
 void Gallow::processInput() {
@@ -83,7 +86,7 @@ void Gallow::processInput() {
     guessed.insert(c);
     size_t notFound = std::string::npos;
 
-    if (word.find(c) == notFound){
+    if (word.find(c) == notFound) {
         std::cout << "Wrong!\n";
         incorrectGuesses++;
     } else {

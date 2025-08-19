@@ -21,14 +21,14 @@ class Gallow {
     void draw();
     void clearScreen();
 
-    bool checkIfWon();
-    bool checkIfLost();
-    std::string getWord() { return word; };
+    const bool checkIfWon();
+    bool checkIfLost() const;
+    std::string getWord() const { return word; }
 
     void processInput();
  private:
     int incorrectGuesses;
-    bool isWon;
+    const int maxWrongGuesses = 7;
     std::string state, word, answer;
     std::set<char> guessed;
 };
